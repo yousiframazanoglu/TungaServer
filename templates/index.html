@@ -1,121 +1,247 @@
 <!DOCTYPE html>
 <html lang="tr">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>İHA Veri Paneli</title>
+    <title>Gelişmiş İHA Veri Paneli</title>
+    
+    <!-- Google Fonts ve Font Awesome İkon Kütüphanesi -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
     <style>
-      body {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        background: linear-gradient(135deg, #e0f7fa, #ffffff);
+      :root {
+        --bg-color: #1a1a2e;
+        --container-bg: #16213e;
+        --primary-color: #0f3460;
+        --accent-color: #e94560;
+        --text-color: #e0fbfc;
+        --input-bg: #1f4068;
+        --border-color: #537895;
+        --success-color: #1b9c85;
+        --error-color: #d63447;
+        --info-color: #3d84b8;
+      }
+
+      * {
+        box-sizing: border-box;
         margin: 0;
         padding: 0;
       }
+
+      body {
+        font-family: 'Poppins', sans-serif;
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        padding: 20px;
+      }
+
       .container {
-        max-width: 1000px;
-        margin: 50px auto;
-        background: #fff;
+        max-width: 900px;
+        width: 100%;
+        background: var(--container-bg);
         padding: 40px;
-        border-radius: 15px;
-        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+        border-radius: 20px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+        border: 1px solid var(--primary-color);
       }
-      h1, h2 {
-        color: #007acc;
+
+      header h1 {
+        color: var(--text-color);
         text-align: center;
-        margin-top: 0;
+        margin-bottom: 30px;
+        font-weight: 700;
+        letter-spacing: 1.5px;
       }
+
+      section {
+        background-color: rgba(15, 52, 96, 0.3);
+        padding: 25px;
+        border-radius: 12px;
+        margin-bottom: 30px;
+      }
+
+      section h2 {
+        color: var(--text-color);
+        border-bottom: 2px solid var(--accent-color);
+        padding-bottom: 10px;
+        margin-bottom: 20px;
+        font-weight: 600;
+        display: inline-block;
+      }
+
       .form-group {
         margin-bottom: 20px;
+        position: relative;
       }
-      label {
-        display: block;
-        font-weight: bold;
-        margin-bottom: 5px;
+
+      .form-group i {
+        position: absolute;
+        left: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--border-color);
+        transition: color 0.3s;
       }
+      
       input[type="text"],
       input[type="password"] {
         width: 100%;
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 6px;
+        padding: 12px 12px 12px 45px; /* İkon için solda boşluk */
+        background-color: var(--input-bg);
+        border: 1px solid var(--primary-color);
+        border-radius: 8px;
         font-size: 16px;
+        color: var(--text-color);
+        transition: border-color 0.3s, box-shadow 0.3s;
       }
+
+      input[type="text"]:focus,
+      input[type="password"]:focus {
+        outline: none;
+        border-color: var(--accent-color);
+        box-shadow: 0 0 10px rgba(233, 69, 96, 0.3);
+      }
+
+      input[type="text"]:focus + i,
+      input[type="password"]:focus + i {
+        color: var(--accent-color);
+      }
+
+      .button-group {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+      }
+      
+      .button-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 15px;
+      }
+
       button {
-        background-color: #007acc;
-        color: white;
-        padding: 10px 20px;
+        padding: 12px 20px;
         border: none;
-        border-radius: 6px;
+        border-radius: 8px;
         cursor: pointer;
         font-size: 16px;
-        transition: background-color 0.3s;
-        margin-right: 10px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
       }
-      button:hover:not(:disabled) {
-        background-color: #005999;
-      }
+      
+      .btn-primary { background-color: var(--accent-color); color: white; }
+      .btn-primary:hover:not(:disabled) { background-color: #ff6b81; transform: translateY(-2px); box-shadow: 0 4px 15px rgba(233, 69, 96, 0.4); }
+      
+      .btn-secondary { background-color: var(--primary-color); color: var(--text-color); }
+      .btn-secondary:hover:not(:disabled) { background-color: #1f4068; transform: translateY(-2px); }
+
+      .btn-danger { background-color: #6c757d; color: white; }
+      .btn-danger:hover:not(:disabled) { background-color: #5a6268; }
+
       button:disabled {
-        background-color: #cccccc;
+        background-color: #343a40;
+        color: #6c757d;
         cursor: not-allowed;
       }
-      pre {
-        background: #f4f4f4;
+
+      .token-display {
+        background: var(--input-bg);
         padding: 15px;
         border-radius: 8px;
-        overflow-x: auto;
-      }
-      .token-display {
-        background: #f0f0f0;
-        padding: 10px;
-        border-radius: 6px;
-        margin-top: 15px;
-        font-family: monospace;
+        font-family: 'Courier New', Courier, monospace;
         word-break: break-all;
+        border: 1px solid var(--primary-color);
+        color: var(--text-color);
+        font-size: 14px;
       }
+
       .status-message {
-        margin-top: 20px;
+        margin-bottom: 20px;
         padding: 15px;
         border-radius: 8px;
         font-weight: bold;
         text-align: center;
+        transition: all 0.3s ease;
       }
-      .status-success { background-color: #d4edda; color: #155724; }
-      .status-error { background-color: #f8d7da; color: #721c24; }
-      .status-info { background-color: #cce5ff; color: #004085; }
+
+      .status-success { background-color: var(--success-color); color: white; }
+      .status-error { background-color: var(--error-color); color: white; }
+      .status-info { background-color: var(--info-color); color: white; }
+
+      pre {
+        background: var(--bg-color);
+        padding: 20px;
+        border-radius: 8px;
+        overflow-x: auto;
+        color: #92e0a9;
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 15px;
+        min-height: 100px;
+        border: 1px dashed var(--border-color);
+      }
     </style>
-  </head>
-  <body>
+</head>
+<body>
     <div class="container">
-      <h1>İHA Veri Paneli</h1>
-      <div class="status-message" id="statusMessage">Giriş yapmak için bilgileri doldurun.</div>
+      <header>
+        <h1><i class="fas fa-satellite-dish"></i> İHA Veri Paneli</h1>
+      </header>
+      
+      <div class="status-message status-info" id="statusMessage">Giriş yapmak için bilgileri doldurun.</div>
 
-      <h2>Giriş Yap</h2>
-      <div class="form-group">
-        <label for="username">Kullanıcı Adı:</label>
-        <input type="text" id="username" placeholder="Kullanıcı Adı" value="teknofest_user" />
-      </div>
-      <div class="form-group">
-        <label for="password">Şifre:</label>
-        <input type="password" id="password" placeholder="Şifre" value="savasaniha2025" />
-      </div>
-      <button id="loginButton" onclick="login()">Giriş Yap</button>
-      <button id="logoutButton" onclick="logout()" disabled>Çıkış Yap</button>
+      <section id="login-section">
+        <h2><i class="fas fa-sign-in-alt"></i> Güvenli Giriş</h2>
+        <form id="loginForm" onsubmit="event.preventDefault(); login();">
+          <div class="form-group">
+            <input type="text" id="username" value="teknofest_user" required />
+            <i class="fas fa-user"></i>
+          </div>
+          <div class="form-group">
+            <input type="password" id="password" value="savasaniha2025" required />
+            <i class="fas fa-lock"></i>
+          </div>
+        </form>
+        <div class="button-group">
+          <button id="loginButton" onclick="login()" class="btn-primary" style="flex-grow: 1;">
+            <i class="fas fa-rocket"></i> Giriş Yap
+          </button>
+          <button id="logoutButton" onclick="logout()" class="btn-danger" disabled>
+            <i class="fas fa-sign-out-alt"></i> Çıkış
+          </button>
+        </div>
+        <div class="token-display">
+          <strong>Token:</strong> <span id="tokenValue">Giriş yapılmadı.</span>
+        </div>
+      </section>
 
-      <div class="token-display" id="tokenDisplay">
-        Token: <span id="tokenValue">Giriş yapılmadı.</span>
-      </div>
-
-      <h2>Veri Çek</h2>
-      <button onclick="fetchData('telemetry')" disabled id="fetchTelemetryButton">Telemetri</button>
-      <button onclick="fetchData('server_time')" disabled id="fetchServerTimeButton">Sunucu Saati</button>
-      <button onclick="fetchData('hss_coordinates')" disabled id="fetchHSSButton">HSS Koordinatları</button>
-      <button onclick="fetchData('lock_on_info')" disabled id="fetchLockOnButton">Kilitlenme</button>
-      <button onclick="fetchData('kamikaze_info')" disabled id="fetchKamikazeButton">Kamikaze</button>
-      <button onclick="fetchData('qr_coordinates')" disabled id="fetchQRButton">QR Koordinatı</button>
-      <button onclick="clearData()">Temizle</button>
-
-      <h2>Sonuçlar</h2>
-      <pre id="dataDisplay">Bekleniyor...</pre>
+      <section id="controls-section">
+        <h2><i class="fas fa-cogs"></i> Kontrol Paneli</h2>
+        <div class="button-grid">
+          <button onclick="fetchData('telemetry')" disabled id="fetchTelemetryButton" class="btn-secondary"><i class="fas fa-wifi"></i> Telemetri</button>
+          <button onclick="fetchData('server_time')" disabled id="fetchServerTimeButton" class="btn-secondary"><i class="fas fa-clock"></i> Sunucu Saati</button>
+          <button onclick="fetchData('hss_coordinates')" disabled id="fetchHSSButton" class="btn-secondary"><i class="fas fa-map-marker-alt"></i> HSS Koordinat</button>
+          <button onclick="fetchData('lock_on_info')" disabled id="fetchLockOnButton" class="btn-secondary"><i class="fas fa-crosshairs"></i> Kilitlenme</button>
+          <button onclick="fetchData('kamikaze_info')" disabled id="fetchKamikazeButton" class="btn-secondary"><i class="fas fa-bomb"></i> Kamikaze</button>
+          <button onclick="fetchData('qr_coordinates')" disabled id="fetchQRButton" class="btn-secondary"><i class="fas fa-qrcode"></i> QR Koordinatı</button>
+          <button onclick="clearData()" class="btn-danger"><i class="fas fa-trash-alt"></i> Temizle</button>
+        </div>
+      </section>
+      
+      <section id="results-section">
+        <h2><i class="fas fa-poll"></i> Sonuçlar</h2>
+        <pre id="dataDisplay">Veri bekleniyor...</pre>
+      </section>
     </div>
 
     <script>
@@ -147,16 +273,19 @@
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ kadi, sifre })
           });
+          
+          const responseText = await response.text();
+          if (!response.ok) {
+            throw new Error(`Sunucu Hatası (${response.status}): ${responseText}`);
+          }
 
-          if (!response.ok) throw new Error(await response.text());
-
-          const data = await response.json();
+          const data = JSON.parse(responseText);
           authToken = data.token;
           document.getElementById('tokenValue').textContent = authToken;
           showStatus('Giriş başarılı!', 'success');
           setButtons(true);
         } catch (err) {
-          showStatus(`Hata: ${err.message}`, 'error');
+          showStatus(`Giriş Hatası: ${err.message}`, 'error');
         }
       }
 
@@ -164,13 +293,27 @@
         authToken = null;
         document.getElementById('tokenValue').textContent = 'Giriş yapılmadı.';
         setButtons(false);
-        showStatus('Çıkış yapıldı.', 'info');
+        showStatus('Oturum sonlandırıldı.', 'info');
         clearData();
       }
 
       async function fetchData(type) {
-        if (!authToken) return showStatus('Önce giriş yapın!', 'error');
+        if (!authToken) {
+          showStatus('Lütfen önce giriş yapın!', 'error');
+          return;
+        }
 
+        const endpointNames = {
+          telemetry: 'Telemetri',
+          server_time: 'Sunucu Saati',
+          hss_coordinates: 'HSS Koordinatları',
+          lock_on_info: 'Kilitlenme Bilgisi',
+          kamikaze_info: 'Kamikaze Bilgisi',
+          qr_coordinates: 'QR Koordinatı'
+        };
+
+        showStatus(`${endpointNames[type]} verisi çekiliyor...`, 'info');
+        
         const urls = {
           telemetry: '/api/telemetri',
           server_time: '/api/sunucusaati',
@@ -186,24 +329,29 @@
           const response = await fetch(url, {
             headers: { Authorization: `Bearer ${authToken}` }
           });
+          
+          const responseText = await response.text();
+          if (!response.ok) {
+            throw new Error(`Sunucu Hatası (${response.status}): ${responseText}`);
+          }
 
-          if (!response.ok) throw new Error(await response.text());
-
-          const data = await response.json();
+          const data = JSON.parse(responseText);
           document.getElementById('dataDisplay').textContent = JSON.stringify(data, null, 2);
-          showStatus(`${type} verisi alındı.`, 'success');
+          showStatus(`${endpointNames[type]} verisi başarıyla alındı.`, 'success');
         } catch (err) {
-          showStatus(`Hata: ${err.message}`, 'error');
+          showStatus(`Veri Çekme Hatası: ${err.message}`, 'error');
+          document.getElementById('dataDisplay').textContent = `Hata Oluştu:\n${err.message}`;
         }
       }
 
       function clearData() {
-        document.getElementById('dataDisplay').textContent = 'Bekleniyor...';
+        document.getElementById('dataDisplay').textContent = 'Veri bekleniyor...';
+        showStatus('Sonuçlar alanı temizlendi.', 'info');
       }
 
       document.addEventListener('DOMContentLoaded', () => {
         setButtons(false);
       });
     </script>
-  </body>
+</body>
 </html>
