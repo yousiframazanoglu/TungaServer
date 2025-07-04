@@ -19,17 +19,25 @@ USERS = {
 
 active_tokens = {}
 
+
 def load_data():
     if not os.path.exists(DATA_FILE):
-        return None
+        return {}
     try:
         with open(DATA_FILE, 'r', encoding='utf-8') as f:
             return json.load(f)
     except:
-        return None
+        return {}
+
+
+def save_data(data):
+    with open(DATA_FILE, 'w', encoding='utf-8') as f:
+        json.dump(data, f, indent=4, ensure_ascii=False)
+
 
 def authenticate_token(token):
     return token in active_tokens
+
 
 @app.before_request
 def check_authorization():
@@ -46,9 +54,11 @@ def check_authorization():
     if not authenticate_token(token):
         return jsonify({"error": "Geçersiz veya süresi dolmuş token."}), 401
 
+
 @app.route('/')
 def index():
     return render_template('index.html')
+
 
 @app.route('/api/giris', methods=['POST'])
 def giris():
@@ -64,12 +74,27 @@ def giris():
     else:
         return jsonify({"error": "Geçersiz kullanıcı adı veya parola."}), 400
 
+
 @app.route('/api/telemetri', methods=['GET'])
 def get_telemetry():
     data = load_data()
     if data and 'telemetry' in data:
         return jsonify(data['telemetry'])
     return jsonify({"error": "Telemetri verisi bulunamadı."}), 500
+
+
+@app.route('/api/telemetri', methods=['POST'])
+def post_telemetry():
+    if not request.is_json:
+        return jsonify({"error": "JSON veri bekleniyor."}), 400
+
+    telemetry_data = request.get_json()
+    current_data = load_data()
+    current_data['telemetry'] = telemetry_data
+    save_data(current_data)
+
+    return jsonify({"message": "Telemetri başarıyla kaydedildi."}), 200
+
 
 @app.route('/api/sunucusaati', methods=['GET'])
 def get_server_time():
@@ -82,6 +107,7 @@ def get_server_time():
         "milisaniye": now.microsecond // 1000
     }
     return jsonify(server_time_data)
+
 
 @app.route('/api/hss_koordinatlari', methods=['GET'])
 def get_hss_coordinates():
@@ -101,12 +127,14 @@ def get_hss_coordinates():
         })
     return jsonify({"error": "HSS koordinat verisi bulunamadı."}), 500
 
+
 @app.route('/api/kilitlenme_bilgisi', methods=['GET'])
 def get_lock_on_info():
     data = load_data()
     if data and 'lock_on_info' in data:
         return jsonify(data['lock_on_info'])
     return jsonify({"error": "Kilitlenme bilgisi bulunamadı."}), 500
+
 
 @app.route('/api/kamikaze_bilgisi', methods=['GET'])
 def get_kamikaze_info():
@@ -115,12 +143,14 @@ def get_kamikaze_info():
         return jsonify(data['kamikaze_info'])
     return jsonify({"error": "Kamikaze bilgisi bulunamadı."}), 500
 
+
 @app.route('/api/qr_koordinati', methods=['GET'])
 def get_qr_coordinates():
     data = load_data()
     if data and 'qr_coordinates' in data:
         return jsonify(data['qr_coordinates'])
     return jsonify({"error": "QR koordinat bilgisi bulunamadı."}), 500
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
